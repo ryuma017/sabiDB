@@ -1,5 +1,5 @@
 use std::fs::{File, OpenOptions};
-use std::io::{self, SeekFrom, Seek, Read, Write};
+use std::io::{self, Read, Seek, SeekFrom, Write};
 use std::path::Path;
 
 use zerocopy::{AsBytes, FromBytes};
@@ -23,6 +23,25 @@ impl PageId {
 
     pub fn to_u64(self) -> u64 {
         self.0
+    }
+}
+
+impl Default for PageId {
+    fn default() -> Self {
+        Self::INVALID_PAGE_ID
+    }
+}
+
+impl From<Option<PageId>> for PageId {
+    fn from(page_id: Option<PageId>) -> Self {
+        page_id.unwrap_or_default()
+    }
+}
+
+impl From<&[u8]> for PageId {
+    fn from(bytes: &[u8]) -> Self {
+        let arr = bytes.try_into().unwrap();
+        PageId(u64::from_ne_bytes(arr))
     }
 }
 
