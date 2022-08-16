@@ -5,6 +5,7 @@ edition = "2021"
 
 
 [dependencies]
+thiserror = "1.0.32"
 zerocopy = "0.6.1"
 
 [dev-dependencies]
