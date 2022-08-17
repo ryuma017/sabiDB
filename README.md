@@ -6,8 +6,8 @@ This implementation is based on the contents of [WEB+DB PRESS Vol.122](https://g
 
 ## Roadmap
 
-- [ ] Disk manager
-- [ ] Buffer pool manager (use Clock-sweep algorithm)
+- [x] Disk manager
+- [x] Buffer pool manager (use Clock-sweep algorithm)
 - [ ] B+Tree as a key-value store
 - [ ] CREATE TABLE
 - [ ] INSERT
