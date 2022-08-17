@@ -89,6 +89,11 @@ impl DiskManager {
         self.next_page_id += 1;
         PageId(page_id)
     }
+
+    pub fn sync(&mut self) -> io::Result<()> {
+        self.heap_file.flush()?;
+        self.heap_file.sync_all()
+    }
 }
 
 #[cfg(test)]
