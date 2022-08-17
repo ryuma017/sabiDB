@@ -6,6 +6,7 @@ use zerocopy::{AsBytes, FromBytes};
 
 pub const PAGE_SIZE: usize = 4096;
 
+///
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, FromBytes, AsBytes)]
 #[repr(C)]
 pub struct PageId(pub u64);
@@ -61,12 +62,12 @@ impl DiskManager {
         })
     }
 
-    pub fn open(data_file_path: impl AsRef<Path>) -> io::Result<Self> {
+    pub fn open(heap_file_path: impl AsRef<Path>) -> io::Result<Self> {
         let heap_file = OpenOptions::new()
             .read(true)
             .write(true)
             .create(true)
-            .open(data_file_path)?;
+            .open(heap_file_path)?;
 
         Self::new(heap_file)
     }
@@ -97,8 +98,8 @@ mod tests {
 
     #[test]
     fn test() {
-        let (data_file, data_file_path) = NamedTempFile::new().unwrap().into_parts();
-        let mut disk = DiskManager::new(data_file).unwrap();
+        let (heap_file, heap_file_path) = NamedTempFile::new().unwrap().into_parts();
+        let mut disk = DiskManager::new(heap_file).unwrap();
 
         let mut hello = Vec::with_capacity(PAGE_SIZE);
         hello.extend_from_slice(b"hello");
@@ -114,7 +115,7 @@ mod tests {
 
         drop(disk);
 
-        let mut disk2 = DiskManager::open(&data_file_path).unwrap();
+        let mut disk2 = DiskManager::open(&heap_file_path).unwrap();
         let mut buf = vec![0; PAGE_SIZE];
 
         disk2.read_page_data(hello_page_id, &mut buf).unwrap();
